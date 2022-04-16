@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -42,11 +42,14 @@ namespace Subtegral.DialogueSystem.Editor
             if (!AssetDatabase.IsValidFolder("Assets/Resources"))
                 AssetDatabase.CreateFolder("Assets", "Resources");
 
-            UnityEngine.Object loadedAsset = AssetDatabase.LoadAssetAtPath($"Assets/Resources/{fileName}.asset", typeof(DialogueContainer));
+            if (!AssetDatabase.IsValidFolder("Resources/Dialogue"))
+                AssetDatabase.CreateFolder("Resources", "Dialogue");
+
+            UnityEngine.Object loadedAsset = AssetDatabase.LoadAssetAtPath($"Assets/Resources/Dialogue/{fileName}.asset", typeof(DialogueContainer));
 
             if (loadedAsset == null || !AssetDatabase.Contains(loadedAsset)) 
 			{
-                AssetDatabase.CreateAsset(dialogueContainerObject, $"Assets/Resources/{fileName}.asset");
+                AssetDatabase.CreateAsset(dialogueContainerObject, $"Assets/Resources/Dialogue/{fileName}.asset");
             }
             else 
 			{
@@ -114,7 +117,7 @@ namespace Subtegral.DialogueSystem.Editor
 
         public void LoadNarrative(string fileName)
         {
-            _dialogueContainer = Resources.Load<DialogueContainer>(fileName);
+            _dialogueContainer = Resources.Load<DialogueContainer>("Dialogue/"+fileName);
             if (_dialogueContainer == null)
             {
                 EditorUtility.DisplayDialog("File Not Found", "Target Narrative Data does not exist!", "OK");
